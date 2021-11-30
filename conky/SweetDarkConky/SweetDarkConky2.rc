@@ -1,0 +1,118 @@
+conky.config = {
+    alignment = 'top_right',
+    background = false,
+    own_window = true,
+    own_window_class = 'Conky',
+    own_window_argb_visual = true,
+    own_window_argb_value = 50,
+    own_window_transparent = true,
+    own_window_type = 'normal',
+    own_window_hints = 'undecorated,below,skip_taskbar,sticky,skip_pager',
+    own_window_colour = '000000',
+    draw_borders = no,
+    gap_x = 10,
+    gap_y = 10,
+    minimum_height = 10,
+    minimum_width = 275,
+
+    use_xft = true,
+    xftalpha = 0.8,
+    font = 'Hack:normal:size=8',
+    text_buffer_size = 2048,
+    uppercase = no,
+    override_utf8_locale = yes,
+
+    default_color = 'ffffff',
+    color1 = 'c6396b',
+    color2 = 'fc8c3b',
+    color3 = 'f9e30f',
+    color4 = '4291e2',
+    color5 = '161925',
+    color6 = '3bf4bb',
+    default_shade_color = '000000',
+    default_outline_color = '000000',
+
+    update_interval = 1.0,
+    total_run_times = 0,
+    draw_shades = no,
+    draw_outline = no,
+    draw_graph_borders = true,
+    show_graph_scale = no,
+    show_graph_range = no,
+    short_units = yes,
+
+    use_spacer = none,
+    double_buffer = true,
+    no_buffers = true,
+    imlib_cache_size = 0,
+    cpu_avg_samples = 2,
+    hddtemp_host = "127.0.0.1",
+    hddtemp_port = "7634",
+}
+
+conky.text = [[
+#--------------------------------------------------------------------------------------------------------------------------------
+#                                                   Date/Time
+#--------------------------------------------------------------------------------------------------------------------------------
+${color4}${font ConkySymbols:size=12}a${font} Date/Time» $hr ${color}
+
+${goto 10}Day :${color2}${alignr 10}${time %A}${color}
+${goto 10}Date:${color2}${alignr 10}${time %d %B %Y}${color}
+${goto 10}Time:${color2}${alignr 10}${time %I}:${time %M %p}${color}
+
+#--------------------------------------------------------------------------------------------------------------------------------
+#                                                   Pacman and Yaourt
+#--------------------------------------------------------------------------------------------------------------------------------
+${color4}${font ConkySymbols:size=12}i${font} Updates» $hr ${color}
+
+${goto 10}Pacman:${alignr 10}${color6}${exec pacman -Qu | wc -l} update(s)${color}
+${goto 10}Yaourt:${alignr 10}${color6}${exec yaourt -Qu | wc -l} update(s)${color}
+
+#--------------------------------------------------------------------------------------------------------------------------------
+#                                                   Network
+#-------------------------------------------------------------------------------------------------------------------------------
+${color4}${font ConkySymbols:size=12}b${font} Network» $hr${color}
+
+${goto 10}Host:${color2}${alignr 10}${exec hostname}${color}
+${goto 10}Network SSID: ${color2}${alignr 10}${wireless_essid wlp4s0}${color}
+${goto 10}Signal:${alignr 10}${color6}${wireless_link_qual_perc wlp4s0} %${color}
+${color4}${goto 10}${stippled_hr}${color}
+${goto 10}Internal IP: ${color2}${alignr 10}${addr wlp4s0}${color}
+${goto 10}External IP: ${color2}${alignr 10}${exec curl ipinfo.io/ip}${color}
+${color4}${goto 10}${stippled_hr}${color}
+${goto 10}Upload Speed:${alignr 10}${color6}${upspeed wlp4s0}${color} ${color5}${upspeedgraph wlp4s0 10,100 fc8c3b c6396b -t}${color}
+${goto 10}Down Speed:${alignr 10}${color6}${downspeed wlp4s0}${color} ${color5}${downspeedgraph wlp4s0 10,100 fc8c3b c6396b -t}${color}
+${voffset -5}
+${goto 10}Total Up:${goto 70}${color2}${totalup wlp4s0} ${color}${alignr 10}Total Down:${color2}${totaldown wlp4s0}
+
+#--------------------------------------------------------------------------------------------------------------------------------
+#                                                   Weather
+#--------------------------------------------------------------------------------------------------------------------------------
+${color4}${font ConkySymbols:size=12}h${font} Weather» $hr ${color}
+${execi 600 bash $HOME/.conky/SweetDarkConky/accuweather/acc_RSS}
+
+${goto 10}${execpi 600 sed -n '1p' $HOME/.conky/SweetDarkConky/accuweather/weather|cut -c 1-10}${color}
+${font conkyweather:size=30}${execpi 600  sed -n '2p' $HOME/.conky/SweetDarkConky/accuweather/weather}${font}
+${goto 75}${voffset -25}${color2}${execpi 600 sed -n '1p' $HOME/.conky/SweetDarkConky/accuweather/weather|cut -c 12-40}${color}
+${goto 75}${color2}${execpi 600 sed -n '1p' $HOME/.conky/SweetDarkConky/accuweather/weather|cut -c 41-60}${color}
+
+${color4}${goto 10}${stippled_hr}${color}
+
+${goto 10}${execi 600  sed -n '3p' $HOME/.conky/SweetDarkConky/accuweather/weather}
+${font conkyweather:size=30}${execpi 600  sed -n '5p' $HOME/.conky/SweetDarkConky/accuweather/weather}${font}
+${goto 75}${voffset -25}${color2}${execpi 600 sed -n '4p' $HOME/.conky/SweetDarkConky/accuweather/weather|cut -c 1-10}
+${goto 75}${color2}${execpi 600 sed -n '4p' $HOME/.conky/SweetDarkConky/accuweather/weather|cut -c 12-20}${color}
+${goto 75}${color2}${execpi 600 sed -n '4p' $HOME/.conky/SweetDarkConky/accuweather/weather|cut -c 22-60}${color}
+
+${color4}${goto 10}${stippled_hr}${color}
+
+${goto 10}${execi 600  sed -n '6p' $HOME/.conky/SweetDarkConky/accuweather/weather}
+${font conkyweather:size=30}${execpi 600  sed -n '8p' $HOME/.conky/SweetDarkConky/accuweather/weather}${color2}${font}
+${goto 75}${voffset -25}${color2}${execpi 600 sed -n '7p' $HOME/.conky/SweetDarkConky/accuweather/weather|cut -c 1-10}
+${goto 75}${color2}${execpi 600 sed -n '7p' $HOME/.conky/SweetDarkConky/accuweather/weather|cut -c 12-20}
+${goto 75}${color2}${execpi 600 sed -n '7p' $HOME/.conky/SweetDarkConky/accuweather/weather|cut -c 22-60}${color}
+
+${color4}${goto 10}${stippled_hr}${color}
+
+#--------------------------------------------------------------------------------------------------------------------------------
+]];

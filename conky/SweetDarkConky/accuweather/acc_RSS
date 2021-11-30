@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+#put your accuweather rss address here
+address="http://rss.accuweather.com/rss/liveweather_rss.asp?metric=1&locCode=87507"
+
+wget -O $HOME/.conky/SweetDarkConky/accuweather/weather_raw $address
+
+if [[ -s $HOME/.conky/SweetDarkConky/accuweather/weather_raw ]]; then
+	egrep 'Currently|Forecast<\/title>|_31x31.gif' $HOME/.conky/SweetDarkConky/accuweather/weather_raw > $HOME/.conky/SweetDarkConky/accuweather/weather
+	sed -i '/AccuWeather\|Currently in/d' $HOME/.conky/SweetDarkConky/accuweather/weather
+	sed -i -e 's/^[ \t]*//g' -e 's/<title>\|<\/title>\|<description>\|<\/description>//g' $HOME/.conky/SweetDarkConky/accuweather/weather
+	sed -i -e 's/&lt;img src="/\n/g' $HOME/.conky/SweetDarkConky/accuweather/weather
+	sed -i '/^$/d' $HOME/.conky/SweetDarkConky/accuweather/weather
+	sed -i -e 's/_31x31.*$//g' -e 's/^.*\/icons\///g' $HOME/.conky/SweetDarkConky/accuweather/weather
+	sed -i -e '1s/.$//' -e '3s/.$//' -e '6s/.$//' $HOME/.conky/SweetDarkConky/accuweather/weather
+	for (( i=2; i<=8; i+=3 ))
+	    do
+	        im=$(sed -n ${i}p $HOME/.conky/SweetDarkConky/accuweather/weather)
+	        sed -i $i"s/^.*$/$(test_image $im)/" $HOME/.conky/SweetDarkConky/accuweather/weather
+	    done
+fi

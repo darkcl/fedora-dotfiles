@@ -1,0 +1,127 @@
+conky.config = {
+    alignment = 'top_right',
+    own_window = true,
+    own_window_class = 'Conky',
+    own_window_argb_visual = true,
+    own_window_argb_value = 0,
+    own_window_transparent = true,
+    own_window_type = 'dock',
+    own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
+    draw_borders = no,
+    gap_x = 10,
+    gap_y = 46,
+    minimum_height = 10,
+    minimum_width = 275,
+
+    use_xft = true,
+    xftalpha = 0.0,
+    font = 'Hack:normal:size=8',
+    text_buffer_size = 2048,
+    uppercase = no,
+    override_utf8_locale = yes,
+    default_color = 'ffffff',
+    color1 = 'c6396b',
+    color2 = 'fc8c3b',
+    color3 = 'f9e30f',
+    color4 = '4291e2',
+    color5 = '161925',
+    color6 = '3bf4bb',
+
+    update_interval = 1.0,
+    total_run_times = 0,
+    draw_shades = no,
+    draw_blended = no,
+    default_shade_color = '000000',
+    draw_outline = no,
+    default_outline_color = '000000',
+    draw_graph_borders = true,
+    show_graph_scale = no,
+    show_graph_range = no,
+    short_units = yes,
+
+    use_spacer = none,
+    double_buffer = true,
+    no_buffers = true,
+    imlib_cache_size = 0,
+    cpu_avg_samples = 2,
+    hddtemp_host = "127.0.0.1",
+    hddtemp_port = "7634",
+}
+
+conky.text = [[
+#--------------------------------------------------------------------------------------------------------------------------------
+#                                                   System
+#--------------------------------------------------------------------------------------------------------------------------------
+${color4}${font ConkySymbols:size=12}a${font} System» $hr ${color}
+
+${goto 10}OS:${color2}${alignr 10}${execi 86400 cat `ls -atr /etc/*-release | tail -2` | grep "PRETTY_NAME" | cut -d= -f2 |  sed 's/"//g'}${color}
+${goto 10}Codename:${color2}${alignr 10}${execi 65000 lsb_release -cs | awk '{print $1}'}${color}
+# ${goto 10}KDE Plasma:${color2}${alignr 10}${exec plasmashell --version | sed 's/\plasmashell //g'}${color}
+${goto 10}${color}Kernel:${color2}${alignr 10}${kernel}${color}
+${goto 10}Uptime:${color6}${alignr 10}$uptime${color}
+${goto 10}Battery Time:${color6}${alignr 10}${battery_time BAT0}
+
+#--------------------------------------------------------------------------------------------------------------------------------
+#                                                   CPU
+#-------------------------------------------------------------------------------------------------------------------------------
+${color4}${font ConkySymbols:size=12}f${font} CPU» $hr${color}
+
+${goto 10}CPU:${color2}${alignr 10}${exec cat /proc/cpuinfo|grep 'model name'|sed -e 's/model name.*: //'| uniq | cut -c 18-26}${color}
+${goto 10}Active Governor: ${color2}${alignr 10}${execi 1 cut -b 1-20 /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor}${color}
+${goto 10}Clock Rate:${color6}${alignr 10}${freq_g 1}GHz${color}
+${goto 10}CPU Temp:${color6}${alignr 10}${exec sensors | grep 'CPU' | awk 'NR==1{print $2}'}
+
+#-------------------------------------------------------------------------------------------------------------------------------
+#                                                   Cores
+#-------------------------------------------------------------------------------------------------------------------------------
+${color}${goto 10}Core 1: ${color6}${freq_g 1}GHz ${alignr 10}${cpu cpu0}% ${color1}${cpubar cpu0 4,80}
+${color}${goto 10}Core 2: ${color6}${freq_g 2}GHz ${alignr 10}${cpu cpu1}% ${color1}${cpubar cpu1 4,80}
+${color}${goto 10}Core 3: ${color6}${freq_g 3}GHz ${alignr 10}${cpu cpu2}% ${color1}${cpubar cpu2 4,80}
+${color}${goto 10}Core 4: ${color6}${freq_g 4}GHz ${alignr 10}${cpu cpu3}% ${color1}${cpubar cpu3 4,80}
+
+#-------------------------------------------------------------------------------------------------------------------------------
+#                                                   GPU
+#-------------------------------------------------------------------------------------------------------------------------------
+${color4}${font ConkySymbols:size=12}f${font} GPU» $hr${color}
+
+${goto 10}Graphics cards:${color2}${alignr 10}${execi 600 lspci | grep VGA | awk -F'[][]' '{print $2}' | sed '1q'}${color}
+${goto 10}Graphics cards:${color2}${alignr 10}${execi 600 lspci | grep VGA | awk -F'[][]' '{print $2}' | sed -n 2p}${color}
+${goto 10}Driver:${color2}${alignr 10}${execi 600 glxinfo | grep "OpenGL version" | sed 's/^.*) //'}${color}
+# ${goto 10}GPU Temp:${color6}${alignr 10}${exec sensors | grep 'CPU' | awk 'NR==1{print $2}'}
+
+#-------------------------------------------------------------------------------------------------------------------------------
+#                                                   Memory
+#-------------------------------------------------------------------------------------------------------------------------------
+${color4}${font ConkySymbols:size=12}J${font} Memory» $hr${color}
+
+${goto 10}RAM: ${color6}$mem${color}/${color2}$memmax ${color6}${alignr 10}$memperc% ${color1}${membar 4,80}${color}
+${goto 10}SWAP: ${color6}$swap${color}/${color2}$swapmax ${color6}${alignr 10}$swapperc% ${color1}${swapbar 4,80}${color}
+# ${goto 10}MEM Temp:${color6}${alignr 10}${exec sensors | grep 'SODIMM' | awk 'NR==1{print $2}'}
+
+#-------------------------------------------------------------------------------------------------------------------------------
+#                                                   Processes
+#-------------------------------------------------------------------------------------------------------------------------------
+${color4}${font ConkySymbols:size=12}n${font} Processes» $hr${color}
+
+${goto 10}${color}NAME${goto 135}PID${goto 185}CPU%${goto 240}MEM${color}${font}
+${color4}${goto 10}${stippled_hr}${color}
+${goto 10}${font Hack:size=8}${color1}${top name 1}${color6}${font}${goto 125}${top pid 1}${goto 170}${top cpu 1}${goto 225}${top mem_res 1}
+${goto 10}${font Hack:size=8}${color1}${top name 2}${color6}${font}${goto 125}${top pid 2}${goto 170}${top cpu 2}${goto 225}${top mem_res 2}
+${goto 10}${font Hack:size=8}${color1}${top name 3}${color6}${font}${goto 125}${top pid 3}${goto 170}${top cpu 3}${goto 225}${top mem_res 3}
+${goto 10}${font Hack:size=8}${color1}${top name 4}${color6}${font}${goto 125}${top pid 4}${goto 170}${top cpu 4}${goto 225}${top mem_res 4}
+${goto 10}${font Hack:size=8}${color1}${top name 5}${color6}${font}${goto 125}${top pid 5}${goto 170}${top cpu 5}${goto 225}${top mem_res 5}
+
+${goto 10}${color}Processes: ${color6}$processes ${alignr 10}${color}Running: ${color6}$running_processes
+
+#-------------------------------------------------------------------------------------------------------------------------------
+#                                                   Storage
+#-------------------------------------------------------------------------------------------------------------------------------
+${color4}${font ConkySymbols:size=12}k${font} Storage» $hr${color}
+
+${goto 10}SSD: ${color6}${fs_used /}${color}/${color2}${fs_size /} ${color6}${alignr 10}${fs_used_perc /}% ${color1}${fs_bar 4,80 /}${color}
+
+${goto 10}Disk I/O Read:  ${color6}${alignr 10}${diskio_read} ${color5}${diskiograph_read 10,100 ADFF2F 32CD32 750}${color}
+${goto 10}Disk I/O Write: ${color6}${alignr 10}${diskio_write}${color} ${color5}${diskiograph_write 10,100 FF0000 8B0000 750}${color}
+
+#-------------------------------------------------------------------------------------------------------------------------------
+]];
