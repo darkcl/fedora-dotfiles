@@ -14,7 +14,6 @@ conky.config = {
     minimum_width = 275,
 
     use_xft = true,
-    xftalpha = 0.0,
     font = 'Hack:normal:size=8',
     text_buffer_size = 2048,
     uppercase = no,
@@ -29,8 +28,8 @@ conky.config = {
 
     update_interval = 1.0,
     total_run_times = 0,
-    draw_shades = no,
-    draw_blended = no,
+    draw_shades = false,
+    draw_blended = false,
     default_shade_color = '000000',
     draw_outline = no,
     default_outline_color = '000000',

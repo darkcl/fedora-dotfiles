@@ -4,6 +4,8 @@ pgrep -x sxhkd > /dev/null || sxhkd &
 
 xsetroot -cursor_name left_ptr &
 
+~/script/reset-workspace.sh
+
 bspc monitor -d I II III IV V VI VII VIII IX X
 
 bspc config border_width         0
@@ -25,6 +27,9 @@ bspc config merge_overlapping_monitors true
 
 bspc rule -a Gimp desktop='^8' state=floating follow=on
 bspc rule -a xfce4-screenshooter manage=off
+bspc rule -a Conky manage=off
+bspc rule -a conky manage=off
+
 bspc rule -a pritunl desktop='^4' state=floating
 
 bspc rule -a discord desktop='^2'
@@ -37,3 +42,23 @@ bspc rule -a Spotify desktop='^4'
 bspc rule -a mplayer2 state=floating
 bspc rule -a Kupfer.py focus=on
 bspc rule -a Screenkey manage=off
+
+bspc rule -a *:tk:PyF9 sticky=on
+
+# Settings
+bspc rule -a Xfce4-settings-manager state=floating
+bspc rule -a Xfce4-mime-settings state=floating
+bspc rule -a Xfce4-session-settings state=floating
+bspc rule -a Xfce4-screensaver-configure state=floating
+bspc rule -a Xfce4-accessibility-settings state=floating
+bspc rule -a Xfce4-mouse-settings state=floating
+bspc rule -a Xfce4-settings-editor state=floating
+bspc rule -a Xfce4-appearance-settings state=floating
+bspc rule -a Xfce4-notes-settings state=floating
+bspc rule -a Xfce4-notifyd-config state=floating
+bspc rule -a Xfce4-clipman-settings state=floating
+bspc rule -a Xfce4-power-manager-settings state=floating
+bspc rule -a Xfce4-display-settings state=floating
+bspc rule -a Xfce4-keyboard-settings state=floating
+bspc rule -a Blueberry.py state=floating
+bspc rule -a Setroubleshoot state=floating
