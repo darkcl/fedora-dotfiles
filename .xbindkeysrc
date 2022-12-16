@@ -1,0 +1,8 @@
+"xdotool key Page_Up"
+  b:10
+
+"xdotool key Page_Down"
+  b:11
+
+"xdotool key Home"
+  b:12
